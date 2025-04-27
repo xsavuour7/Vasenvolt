@@ -1,0 +1,49 @@
+version: 2
+updates:
+  # Enable version updates for npm
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    labels:
+      - "dependencies"
+      - "javascript"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    # Group updates by dependency type
+    groups:
+      production-dependencies:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "@types/*"
+          - "typescript"
+          - "eslint*"
+          - "prettier*"
+      dev-dependencies:
+        patterns:
+          - "@types/*"
+          - "typescript"
+          - "eslint*"
+          - "prettier*"
+    # Ignore major version updates for critical dependencies
+    ignore:
+      - dependency-name: "next"
+        versions: ["[0-9]+.0.0"]
+      - dependency-name: "react"
+        versions: ["[0-9]+.0.0"]
+      - dependency-name: "react-dom"
+        versions: ["[0-9]+.0.0"]
+      - dependency-name: "firebase"
+        versions: ["[0-9]+.0.0"]
+    # Open pull requests for security updates immediately
+    open-pull-requests-limit: 10
+    reviewers:
+      - "hayden"
+    assignees:
+      - "hayden"
+    milestone: 1 

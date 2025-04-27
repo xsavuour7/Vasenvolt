@@ -1,0 +1,55 @@
+[debug] [2025-04-23T23:03:06.950Z] ----------------------------------------------------------------------
+[debug] [2025-04-23T23:03:06.953Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Hayden\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only firestore:rules --debug
+[debug] [2025-04-23T23:03:06.953Z] CLI Version:   14.2.1
+[debug] [2025-04-23T23:03:06.953Z] Platform:      win32
+[debug] [2025-04-23T23:03:06.953Z] Node Version:  v22.14.0
+[debug] [2025-04-23T23:03:06.953Z] Time:          Thu Apr 24 2025 00:03:06 GMT+0100 (British Summer Time)
+[debug] [2025-04-23T23:03:06.953Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-04-23T23:03:07.118Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-04-23T23:03:07.119Z] > authorizing via signed-in user (hayzen993@gmail.com)
+[debug] [2025-04-23T23:03:07.119Z] [iam] checking project vasenvolt-application for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]
+[debug] [2025-04-23T23:03:07.121Z] Checked if tokens are valid: true, expires at: 1745451519392
+[debug] [2025-04-23T23:03:07.121Z] Checked if tokens are valid: true, expires at: 1745451519392
+[debug] [2025-04-23T23:03:07.122Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/vasenvolt-application:testIamPermissions [none]
+[debug] [2025-04-23T23:03:07.123Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/vasenvolt-application:testIamPermissions x-goog-quota-user=projects/vasenvolt-application
+[debug] [2025-04-23T23:03:07.123Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/vasenvolt-application:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]}
+[debug] [2025-04-23T23:03:07.826Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/vasenvolt-application:testIamPermissions 200
+[debug] [2025-04-23T23:03:07.827Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/vasenvolt-application:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]}
+[info] 
+[info] === Deploying to 'vasenvolt-application'...
+[info] 
+[info] i  deploying firestore 
+[info] i  firestore: reading indexes from firestore.indexes.json... 
+[info] i  cloud.firestore: checking (Firestore Rules) for compilation errors... 
+[debug] [2025-04-23T23:03:07.837Z] Checked if tokens are valid: true, expires at: 1745451519392
+[debug] [2025-04-23T23:03:07.837Z] Checked if tokens are valid: true, expires at: 1745451519392
+[debug] [2025-04-23T23:03:07.838Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/vasenvolt-application:test [none]
+[debug] [2025-04-23T23:03:07.838Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/vasenvolt-application:test [omitted]
+[debug] [2025-04-23T23:03:08.538Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/vasenvolt-application:test 200
+[debug] [2025-04-23T23:03:08.539Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/vasenvolt-application:test {}
+[info] +  cloud.firestore: rules file (Firestore Rules) compiled successfully 
+[debug] [2025-04-23T23:03:08.542Z] Checked if tokens are valid: true, expires at: 1745451519392
+[debug] [2025-04-23T23:03:08.546Z] Checked if tokens are valid: true, expires at: 1745451519392
+[debug] [2025-04-23T23:03:08.548Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/vasenvolt-application/releases pageSize=10&pageToken=
+[debug] [2025-04-23T23:03:09.252Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/vasenvolt-application/releases 200
+[debug] [2025-04-23T23:03:09.252Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/vasenvolt-application/releases {"releases":[{"name":"projects/vasenvolt-application/releases/cloud.firestore","rulesetName":"projects/vasenvolt-application/rulesets/3193840e-e396-45a2-91f5-855eaf81c7f0","createTime":"2025-04-23T22:08:37.766866Z","updateTime":"2025-04-23T22:57:57.700962Z"}]}
+[debug] [2025-04-23T23:03:09.253Z] Checked if tokens are valid: true, expires at: 1745451519392
+[debug] [2025-04-23T23:03:09.254Z] Checked if tokens are valid: true, expires at: 1745451519392
+[debug] [2025-04-23T23:03:09.254Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/vasenvolt-application/rulesets/3193840e-e396-45a2-91f5-855eaf81c7f0 [none]
+[debug] [2025-04-23T23:03:09.973Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/vasenvolt-application/rulesets/3193840e-e396-45a2-91f5-855eaf81c7f0 200
+[debug] [2025-04-23T23:03:09.974Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/vasenvolt-application/rulesets/3193840e-e396-45a2-91f5-855eaf81c7f0 [omitted]
+[info] i  firestore: latest version of (Firestore Rules) already up to date, skipping upload... 
+[debug] [2025-04-23T23:03:09.978Z] [rules] releasing cloud.firestore/(default) with ruleset projects/vasenvolt-application/rulesets/3193840e-e396-45a2-91f5-855eaf81c7f0
+[debug] [2025-04-23T23:03:09.979Z] Checked if tokens are valid: true, expires at: 1745451519392
+[debug] [2025-04-23T23:03:09.979Z] Checked if tokens are valid: true, expires at: 1745451519392
+[debug] [2025-04-23T23:03:09.980Z] >>> [apiv2][query] PATCH https://firebaserules.googleapis.com/v1/projects/vasenvolt-application/releases/cloud.firestore/(default) [none]
+[debug] [2025-04-23T23:03:09.982Z] >>> [apiv2][body] PATCH https://firebaserules.googleapis.com/v1/projects/vasenvolt-application/releases/cloud.firestore/(default) {"release":{"name":"projects/vasenvolt-application/releases/cloud.firestore/(default)","rulesetName":"projects/vasenvolt-application/rulesets/3193840e-e396-45a2-91f5-855eaf81c7f0"}}
+[debug] [2025-04-23T23:03:10.884Z] <<< [apiv2][status] PATCH https://firebaserules.googleapis.com/v1/projects/vasenvolt-application/releases/cloud.firestore/(default) 200
+[debug] [2025-04-23T23:03:10.885Z] <<< [apiv2][body] PATCH https://firebaserules.googleapis.com/v1/projects/vasenvolt-application/releases/cloud.firestore/(default) {"name":"projects/vasenvolt-application/releases/cloud.firestore","rulesetName":"projects/vasenvolt-application/rulesets/3193840e-e396-45a2-91f5-855eaf81c7f0","createTime":"2025-04-23T22:08:37.766866Z","updateTime":"2025-04-23T23:03:10.845557Z"}
+[debug] [2025-04-23T23:03:10.886Z] [rules] updated release projects/vasenvolt-application/releases/cloud.firestore
+[info] +  firestore: released rules (Firestore Rules) to cloud.firestore 
+[info] 
+[info] +  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/vasenvolt-application/overview
