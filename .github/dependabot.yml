@@ -8,6 +8,10 @@ updates:
       day: "monday"
       time: "09:00"
       timezone: "America/New_York"
+    Reviewers:
+    - "xsavuour7"
+    Assignees:
+    - "xsavuour7"
     labels:
       - "dependencies"
       - "javascript"
