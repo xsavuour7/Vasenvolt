@@ -1,0 +1,357 @@
+name: CI/CD Pipeline
+
+on:
+  # Automatic triggers
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  
+  # Manual triggers for deployment
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deploy to environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+        - staging
+        - production
+      deploy_backend:
+        description: 'Deploy backend'
+        required: false
+        default: true
+        type: boolean
+      deploy_frontend:
+        description: 'Deploy frontend'
+        required: false
+        default: true
+        type: boolean
+
+env:
+  BACKEND_STAGING_URL: ${{ secrets.BACKEND_STAGING_URL }}
+  FRONTEND_STAGING_URL: ${{ secrets.FRONTEND_STAGING_URL }}
+  STAGING_SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
+  STAGING_HOST: ${{ secrets.STAGING_HOST }}
+  STAGING_USER: ${{ secrets.STAGING_USER }}
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+jobs:
+  # Linting and Testing Jobs
+  lint-backend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        cd backend
+        pip install -r requirements.txt
+    
+    - name: Run Black (code formatting)
+      run: |
+        cd backend
+        black --check --diff .
+    
+    - name: Run Flake8 (linting)
+      run: |
+        cd backend
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics
+    
+    - name: Run isort (import sorting)
+      run: |
+        cd backend
+        isort --check-only --diff .
+
+  test-backend:
+    runs-on: ubuntu-latest
+    needs: lint-backend
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: vasenvolt_test
+          POSTGRES_USER: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        cd backend
+        pip install -r requirements.txt
+    
+    - name: Create test environment file
+      run: |
+        cd backend
+        cp env.test .env.test
+        echo "DATABASE__DATABASE_URL=postgresql://postgres:postgres@localhost:5432/vasenvolt_test" >> .env.test
+        echo "DATABASE__DATABASE_TEST_URL=postgresql://postgres:postgres@localhost:5432/vasenvolt_test" >> .env.test
+        echo "SECURITY__SECRET_KEY=test-secret-key-32-chars-long-for-testing" >> .env.test
+        echo "REDIS__REDIS_URL=redis://localhost:6379/0" >> .env.test
+        echo "CORS__FRONTEND_URL=http://localhost:3000" >> .env.test
+        echo "CORS__ALLOWED_ORIGINS=[\"http://localhost:3000\"]" >> .env.test
+        echo "SMTP__SMTP_HOST=localhost" >> .env.test
+        echo "SMTP__SMTP_PORT=587" >> .env.test
+        echo "SMTP__SMTP_USERNAME=test" >> .env.test
+        echo "SMTP__SMTP_PASSWORD=test" >> .env.test
+        echo "SMTP__SMTP_USE_TLS=false" >> .env.test
+        echo "SMTP__SMTP_FROM_EMAIL=test@example.com" >> .env.test
+        echo "SMTP__SMTP_FROM_NAME=Test" >> .env.test
+    
+    - name: Run tests with coverage
+      env:
+        APP_ENV: test
+      run: |
+        cd backend
+        python -m pytest --cov=app --cov-report=xml --cov-report=term-missing
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./backend/coverage.xml
+        flags: backend
+        name: backend-coverage
+
+  lint-frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install dependencies
+      run: |
+        cd frontend
+        npm ci
+    
+    - name: Run ESLint
+      run: |
+        cd frontend
+        npm run lint
+    
+    - name: Run Prettier check
+      run: |
+        cd frontend
+        npx prettier --check .
+
+  test-frontend:
+    runs-on: ubuntu-latest
+    needs: lint-frontend
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install dependencies
+      run: |
+        cd frontend
+        npm ci
+    
+    - name: Run tests
+      run: |
+        cd frontend
+        npm test -- --coverage --watchAll=false
+    
+    - name: Build application
+      run: |
+        cd frontend
+        npm run build
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./frontend/coverage/lcov.info
+        flags: frontend
+        name: frontend-coverage
+
+  security-audit:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install dependencies
+      run: |
+        cd frontend
+        npm ci
+    
+    - name: Run security audit
+      run: |
+        cd frontend
+        npm audit --audit-level moderate
+    
+    - name: Run Snyk security scan
+      uses: snyk/actions/node@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --severity-threshold=high
+        working-directory: frontend
+
+  # Deployment Jobs
+  deploy-backend-staging:
+    runs-on: ubuntu-latest
+    needs: [test-backend, test-frontend]
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.deploy_backend == 'true' && github.event.inputs.environment == 'staging'
+    environment: staging
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        cd backend
+        pip install -r requirements.txt
+    
+    - name: Create staging environment file
+      run: |
+        cd backend
+        cp env.production .env.staging
+        echo "APP_ENV=staging" >> .env.staging
+    
+    - name: Run database migrations
+      run: |
+        cd backend
+        python migrate.py migrate
+      env:
+        APP_ENV: staging
+    
+    - name: Deploy to staging server
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ env.STAGING_HOST }}
+        username: ${{ env.STAGING_USER }}
+        key: ${{ env.STAGING_SSH_KEY }}
+        script: |
+          cd /opt/vasenvolt/backend
+          git pull origin develop
+          source venv/bin/activate
+          pip install -r requirements.txt
+          python migrate.py migrate
+          sudo systemctl restart vasenvolt-backend
+          echo "Backend deployed successfully to staging"
+
+  deploy-frontend-staging:
+    runs-on: ubuntu-latest
+    needs: [test-backend, test-frontend]
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.deploy_frontend == 'true' && github.event.inputs.environment == 'staging'
+    environment: staging
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install dependencies
+      run: |
+        cd frontend
+        npm ci
+    
+    - name: Build application
+      run: |
+        cd frontend
+        npm run build
+    
+    - name: Deploy to Vercel (Staging)
+      working-directory: frontend
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ env.VERCEL_TOKEN }}
+        vercel-org-id: ${{ env.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ env.VERCEL_PROJECT_ID }}
+        vercel-args: '--prod'
+        alias-domains: |
+          staging.vasenvolt.com
+          ${{ env.FRONTEND_STAGING_URL }}
+
+  # Production Deployment (Manual only)
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: [test-backend, test-frontend]
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production'
+    environment: production
+    
+    steps:
+    - name: Production deployment placeholder
+      run: |
+        echo "Production deployment would happen here"
+        echo "This requires additional security measures and approval"
+        echo "Environment: ${{ github.event.inputs.environment }}"
+        echo "Deploy Backend: ${{ github.event.inputs.deploy_backend }}"
+        echo "Deploy Frontend: ${{ github.event.inputs.deploy_frontend }}"
+
+  # Notifications
+  notify-deployment:
+    runs-on: ubuntu-latest
+    needs: [deploy-backend-staging, deploy-frontend-staging, deploy-production]
+    if: always()
+    
+    steps:
+    - name: Notify deployment status
+      run: |
+        echo "Deployment workflow completed"
+        echo "Check the individual job results for detailed status"
