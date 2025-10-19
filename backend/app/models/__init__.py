@@ -6,6 +6,7 @@ from .site import Site
 from .meter import Meter, MeterType, MeterStatus
 from .meter_reading import MeterReading
 from .refresh_token import RefreshToken
+from .telemetry import Telemetry
 
 __all__ = [
     "User",
@@ -15,5 +16,6 @@ __all__ = [
     "MeterType",
     "MeterStatus",
     "MeterReading",
-    "RefreshToken"
+    "RefreshToken",
+    "Telemetry"
 ]

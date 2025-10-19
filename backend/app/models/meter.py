@@ -56,3 +56,4 @@ class Meter(Base):
     # Relationships
     site = relationship("Site", back_populates="meters")
     readings = relationship("MeterReading", back_populates="meter")
+    telemetry = relationship("Telemetry", back_populates="meter")

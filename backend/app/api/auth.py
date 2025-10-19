@@ -22,7 +22,55 @@ import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/auth", tags=["authentication"])
 
-@router.post("/signup", response_model=TokenResponse)
+@router.post(
+    "/signup", 
+    response_model=TokenResponse,
+    summary="User Registration",
+    description="Create a new user account and receive authentication tokens",
+    responses={
+        201: {
+            "description": "User successfully created",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                        "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                        "token_type": "bearer",
+                        "expires_in": 3600,
+                        "refresh_expires_in": 2592000,
+                        "user_id": 123,
+                        "email": "newuser@example.com",
+                        "username": "johndoe"
+                    }
+                }
+            }
+        },
+        400: {
+            "description": "Bad Request - Email already registered or username taken",
+            "content": {
+                "application/json": {
+                    "example": {"detail": "Email already registered"}
+                }
+            }
+        },
+        422: {
+            "description": "Validation Error - Invalid input data",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "detail": [
+                            {
+                                "loc": ["body", "password"],
+                                "msg": "Password must contain uppercase, lowercase, number, and special character",
+                                "type": "value_error"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+)
 async def signup(
     user_data: SignupRequest, 
     db: Session = Depends(get_db),
@@ -31,11 +79,16 @@ async def signup(
     """
     Create a new user account and return authentication tokens.
     
-    Requirements:
+    **Requirements:**
     - Password must be at least 8 characters
     - Password must contain uppercase, lowercase, number, and special character
     - Email must be unique
     - Username must be unique (3-50 characters)
+    
+    **Returns:**
+    - Access token (expires in 1 hour)
+    - Refresh token (expires in 30 days)
+    - User information
     """
     # Rate limiting
     if request:
@@ -102,7 +155,47 @@ async def signup(
         username=db_user.username
     )
 
-@router.post("/login", response_model=TokenResponse)
+@router.post(
+    "/login", 
+    response_model=TokenResponse,
+    summary="User Login",
+    description="Authenticate user and receive authentication tokens",
+    responses={
+        200: {
+            "description": "Login successful",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                        "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                        "token_type": "bearer",
+                        "expires_in": 3600,
+                        "refresh_expires_in": 2592000,
+                        "user_id": 123,
+                        "email": "user@example.com",
+                        "username": "johndoe"
+                    }
+                }
+            }
+        },
+        401: {
+            "description": "Unauthorized - Invalid credentials",
+            "content": {
+                "application/json": {
+                    "example": {"detail": "Incorrect email or password"}
+                }
+            }
+        },
+        400: {
+            "description": "Bad Request - Account deactivated",
+            "content": {
+                "application/json": {
+                    "example": {"detail": "User account is deactivated"}
+                }
+            }
+        }
+    }
+)
 async def login(
     login_data: LoginRequest, 
     db: Session = Depends(get_db),
@@ -111,9 +204,14 @@ async def login(
     """
     Authenticate user and return access and refresh tokens.
     
-    Requirements:
+    **Requirements:**
     - Valid email and password
     - User account must be active
+    
+    **Returns:**
+    - Access token (expires in 1 hour)
+    - Refresh token (expires in 30 days)
+    - User information
     """
     # Rate limiting
     if request:

@@ -19,3 +19,4 @@ class Tenant(Base):
     # Relationships
     users = relationship("User", back_populates="tenant")
     sites = relationship("Site", back_populates="tenant")
+    telemetry = relationship("Telemetry", back_populates="tenant")

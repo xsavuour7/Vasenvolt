@@ -25,7 +25,7 @@ class MeterReading(Base):
     meter_id = Column(Integer, ForeignKey("meters.id"), nullable=False)
     
     # Additional data (JSON string for flexibility)
-    metadata = Column(Text, nullable=True)
+    reading_metadata = Column(Text, nullable=True)
     
     # Relationships
     meter = relationship("Meter", back_populates="readings")

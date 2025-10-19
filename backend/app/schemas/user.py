@@ -3,15 +3,15 @@ from typing import Optional
 from datetime import datetime
 
 class UserBase(BaseModel):
-    email: EmailStr = Field(..., description="User email address")
-    username: str = Field(..., min_length=3, max_length=50, description="Username (3-50 characters)")
-    first_name: Optional[str] = Field(None, max_length=100, description="First name")
-    last_name: Optional[str] = Field(None, max_length=100, description="Last name")
-    phone: Optional[str] = Field(None, max_length=20, description="Phone number")
-    avatar_url: Optional[str] = Field(None, description="Avatar image URL")
+    email: EmailStr = Field(..., description="User email address", example="user@example.com")
+    username: str = Field(..., min_length=3, max_length=50, description="Username (3-50 characters)", example="johndoe")
+    first_name: Optional[str] = Field(None, max_length=100, description="First name", example="John")
+    last_name: Optional[str] = Field(None, max_length=100, description="Last name", example="Doe")
+    phone: Optional[str] = Field(None, max_length=20, description="Phone number", example="+1234567890")
+    avatar_url: Optional[str] = Field(None, description="Avatar image URL", example="https://example.com/avatar.jpg")
 
 class UserCreate(UserBase):
-    password: str = Field(..., min_length=8, description="Password (minimum 8 characters)")
+    password: str = Field(..., min_length=8, description="Password (minimum 8 characters)", example="SecurePass123!")
     
     @validator('password')
     def validate_password_strength(cls, v):

@@ -37,3 +37,4 @@ class Site(Base):
     # Relationships
     tenant = relationship("Tenant", back_populates="sites")
     meters = relationship("Meter", back_populates="site")
+    telemetry = relationship("Telemetry", back_populates="site")

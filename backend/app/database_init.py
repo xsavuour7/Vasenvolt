@@ -11,6 +11,8 @@ from app.auth.security import get_password_hash
 from config import settings
 import logging
 
+DATABASE_URL = "postgresql://postgres:Mango2020%40Museveni100@localhost:5432/vasenvolt"
+
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
