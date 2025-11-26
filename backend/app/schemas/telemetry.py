@@ -127,3 +127,26 @@ class TelemetryStats(BaseModel):
     avg_voltage: Optional[float] = Field(None, description="Average voltage", example=240.2)
     avg_current: Optional[float] = Field(None, description="Average current", example=12.5)
     avg_power_factor: Optional[float] = Field(None, description="Average power factor", example=0.92)
+
+class MetricsDataPoint(BaseModel):
+    """Schema for a single metrics data point in timeseries"""
+    timestamp: datetime = Field(..., description="Timestamp of the data point", example="2024-01-15T10:30:00Z")
+    kwh: Optional[float] = Field(None, description="Energy consumption (sum/avg/min/max)", example=1234.56)
+    voltage: Optional[float] = Field(None, description="Voltage (avg/min/max)", example=240.5)
+    current: Optional[float] = Field(None, description="Current (avg/min/max)", example=15.2)
+    power_factor: Optional[float] = Field(None, description="Power factor (avg/min/max)", example=0.95)
+    power: Optional[float] = Field(None, description="Power (sum/avg/min/max)", example=3650.0)
+
+class MetricsResponse(BaseModel):
+    """Schema for metrics endpoint response"""
+    meter_id: Optional[int] = Field(None, description="Meter ID filter", example=123)
+    site_id: Optional[int] = Field(None, description="Site ID filter", example=1)
+    range: str = Field(..., description="Time range requested", example="24h")
+    start_time: datetime = Field(..., description="Start time of the range", example="2024-01-15T00:00:00Z")
+    end_time: datetime = Field(..., description="End time of the range", example="2024-01-15T23:59:59Z")
+    aggregations: dict = Field(..., description="Applied aggregations", example={"kwh": "sum", "voltage": "avg"})
+    data: List[MetricsDataPoint] = Field(..., description="Timeseries data points")
+    total_points: int = Field(..., description="Total number of data points", example=100)
+    page: int = Field(..., description="Current page number", example=1)
+    page_size: int = Field(..., description="Number of points per page", example=100)
+    has_more: bool = Field(..., description="Whether there are more pages", example=False)

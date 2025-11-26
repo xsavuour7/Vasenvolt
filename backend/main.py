@@ -1,11 +1,12 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from app.api import auth, telemetry
+from app.api import auth, telemetry, metrics
 from app.database import get_db
 from sqlalchemy.orm import Session
 from fastapi import Depends
-from app.auth.middleware import security_headers_middleware
+from app.auth.middleware import security_headers_middleware, require_auth, require_admin, require_active_user
+from app.services.mqtt_subscriber import mqtt_subscriber
 from config import settings
 import logging
 
@@ -85,6 +86,24 @@ app.middleware("http")(security_headers_middleware)
 # Include API routers
 app.include_router(auth.router)
 app.include_router(telemetry.router)
+app.include_router(metrics.router)
+
+# MQTT Subscriber lifecycle
+@app.on_event("startup")
+async def startup_event():
+    """Start MQTT subscriber on application startup"""
+    try:
+        mqtt_subscriber.start()
+    except Exception as e:
+        logger.error(f"Failed to start MQTT subscriber: {e}")
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Stop MQTT subscriber on application shutdown"""
+    try:
+        mqtt_subscriber.stop()
+    except Exception as e:
+        logger.error(f"Error stopping MQTT subscriber: {e}")
 
 @app.get(
     "/",
@@ -191,17 +210,17 @@ async def database_health_check(db: Session = Depends(get_db)):
         )
 
 # Protected route examples
-@app.get("/protected", dependencies=[Depends(auth.require_auth())])
+@app.get("/protected", dependencies=[require_auth()])
 async def protected_route():
     """Example protected route that requires authentication."""
     return {"message": "This is a protected route", "status": "authenticated"}
 
-@app.get("/admin", dependencies=[Depends(auth.require_admin())])
+@app.get("/admin", dependencies=[require_admin()])
 async def admin_route():
     """Example admin route that requires admin privileges."""
     return {"message": "This is an admin route", "status": "admin_authenticated"}
 
-@app.get("/user/profile", dependencies=[Depends(auth.require_active_user())])
+@app.get("/user/profile", dependencies=[require_active_user()])
 async def user_profile():
     """Example route that requires active user status."""
     return {"message": "User profile route", "status": "active_user_required"}

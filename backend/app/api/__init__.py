@@ -1,5 +1,5 @@
 # API Routes Module
 
-from . import auth, telemetry
+from . import auth, telemetry, metrics
 
-__all__ = ["auth", "telemetry"]
+__all__ = ["auth", "telemetry", "metrics"]

@@ -59,6 +59,21 @@ class StorageSettings(BaseModel):
     aws_region: str = Field(default="us-east-1", description="AWS region")
     aws_s3_bucket: str = Field(default="", description="AWS S3 bucket name")
 
+class MQTTSettings(BaseModel):
+    enabled: bool = Field(default=False, description="Enable MQTT subscriber")
+    broker_host: str = Field(default="localhost", description="MQTT broker host")
+    broker_port: int = Field(default=1883, description="MQTT broker port")
+    username: str = Field(default="", description="MQTT username")
+    password: str = Field(default="", description="MQTT password")
+    use_tls: bool = Field(default=False, description="Use TLS for MQTT connection")
+    ca_cert_path: str = Field(default="", description="Path to CA certificate file")
+    client_cert_path: str = Field(default="", description="Path to client certificate file")
+    client_key_path: str = Field(default="", description="Path to client key file")
+    topic_prefix: str = Field(default="", description="Topic prefix (e.g., 'telemetry')")
+    client_id: str = Field(default="vasenvolt-telemetry-subscriber", description="MQTT client ID")
+    keepalive: int = Field(default=60, description="Keepalive interval in seconds")
+    reconnect_delay: int = Field(default=10, description="Reconnection delay in seconds")
+
 class Settings(BaseSettings):
     # Environment
     environment: str = Field(..., description="Application environment")
@@ -114,6 +129,21 @@ class Settings(BaseSettings):
     aws_secret_access_key: str = Field(default="", description="AWS secret key")
     aws_region: str = Field(default="us-east-1", description="AWS region")
     aws_s3_bucket: str = Field(default="", description="AWS S3 bucket")
+    
+    # MQTT
+    mqtt_enabled: bool = Field(default=False, description="Enable MQTT subscriber")
+    mqtt_broker_host: str = Field(default="localhost", description="MQTT broker host")
+    mqtt_broker_port: int = Field(default=1883, description="MQTT broker port")
+    mqtt_username: str = Field(default="", description="MQTT username")
+    mqtt_password: str = Field(default="", description="MQTT password")
+    mqtt_use_tls: bool = Field(default=False, description="Use TLS for MQTT")
+    mqtt_ca_cert_path: str = Field(default="", description="MQTT CA certificate path")
+    mqtt_client_cert_path: str = Field(default="", description="MQTT client certificate path")
+    mqtt_client_key_path: str = Field(default="", description="MQTT client key path")
+    mqtt_topic_prefix: str = Field(default="", description="MQTT topic prefix")
+    mqtt_client_id: str = Field(default="vasenvolt-telemetry-subscriber", description="MQTT client ID")
+    mqtt_keepalive: int = Field(default=60, description="MQTT keepalive seconds")
+    mqtt_reconnect_delay: int = Field(default=10, description="MQTT reconnect delay seconds")
 
     model_config = SettingsConfigDict(
         env_file=env_file,
@@ -202,6 +232,23 @@ class Settings(BaseSettings):
             aws_secret_access_key=self.aws_secret_access_key,
             aws_region=self.aws_region,
             aws_s3_bucket=self.aws_s3_bucket
+        )
+    
+    def get_mqtt_settings(self) -> MQTTSettings:
+        return MQTTSettings(
+            enabled=self.mqtt_enabled,
+            broker_host=self.mqtt_broker_host,
+            broker_port=self.mqtt_broker_port,
+            username=self.mqtt_username,
+            password=self.mqtt_password,
+            use_tls=self.mqtt_use_tls,
+            ca_cert_path=self.mqtt_ca_cert_path,
+            client_cert_path=self.mqtt_client_cert_path,
+            client_key_path=self.mqtt_client_key_path,
+            topic_prefix=self.mqtt_topic_prefix,
+            client_id=self.mqtt_client_id,
+            keepalive=self.mqtt_keepalive,
+            reconnect_delay=self.mqtt_reconnect_delay
         )
 
 # Global settings instance

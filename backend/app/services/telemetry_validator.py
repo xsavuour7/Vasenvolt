@@ -1,9 +1,26 @@
 """
-Telemetry Data Validation and Normalization Service
+Telemetry Data Validation and Normalization Middleware Layer
 
 This service provides comprehensive validation and normalization for telemetry data
 before it's stored in the database. It ensures data quality, consistency, and
 compliance with business rules.
+
+Normalization Features:
+- Auto-converts timestamps to UTC ISO8601 format
+- Rounds all numeric values to 3 decimal places
+- Rejects negative kWh values
+- Validates data types and ranges
+
+This middleware layer is used by all telemetry ingestion endpoints:
+- REST API (POST /api/telemetry)
+- CSV Import (POST /api/telemetry/import)
+- MQTT Subscriber (real-time streaming)
+
+Invalid records are logged with detailed error information including:
+- Field name
+- Invalid value
+- Error message
+- Timestamp of validation failure
 """
 
 import logging
