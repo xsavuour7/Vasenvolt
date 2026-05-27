@@ -1,0 +1,27 @@
+{
+  "name": "hook.js",
+  "version": "0.1.0",
+  "description": "add pre or post hooks to your methods",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isayme/hook.js.git"
+  },
+  "keywords": [
+    "hook",
+    "pre",
+    "post"
+  ],
+  "author": "iSayme <isaymeorg@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/isayme/hook.js/issues"
+  },
+  "homepage": "https://github.com/isayme/hook.js#readme"
+}

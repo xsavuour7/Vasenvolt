@@ -1,0 +1,52 @@
+{
+  "name": "vasenvolt-monorepo",
+  "version": "1.0.0",
+  "description": "Vasenvolt Secure Authentication System - Monorepo",
+  "private": true,
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && python dev.py",
+    "install:all": "npm install && cd frontend && npm install",
+    "build": "cd frontend && npm run build",
+    "lint": "cd frontend && npm run lint",
+    "test": "cd backend && python -m pytest",
+    "setup": "npm run setup:backend && npm run setup:frontend",
+    "setup:backend": "cd backend && python dev.py --setup-only",
+    "setup:frontend": "cd frontend && npm install",
+    "migrate": "cd backend && python migrate.py",
+    "db:init": "cd backend && python migrate.py init",
+    "db:migrate": "cd backend && python migrate.py migrate",
+    "db:create": "cd backend && python migrate.py create",
+    "db:rollback": "cd backend && python migrate.py rollback",
+    "db:status": "cd backend && python migrate.py status",
+    "validate": "cd backend && python validate_config.py",
+    "config:check": "cd backend && python validate_config.py",
+    "test:auth": "cd backend && python -m pytest tests/test_auth.py -v",
+    "test:coverage": "cd backend && python -m pytest tests/test_auth.py --cov=app.auth --cov-report=html",
+    "ci:lint": "npm run ci:lint:backend && npm run ci:lint:frontend",
+    "ci:lint:backend": "cd backend && black --check . && flake8 . && isort --check-only .",
+    "ci:lint:frontend": "cd frontend && npm run lint && npx prettier --check .",
+    "ci:test": "npm run ci:test:backend && npm run ci:test:frontend",
+    "ci:test:backend": "cd backend && python -m pytest --cov=app --cov-report=xml --cov-report=term-missing",
+    "ci:test:frontend": "cd frontend && npm test -- --coverage --watchAll=false && npm run build",
+    "ci:security": "cd frontend && npm audit --audit-level moderate",
+    "ci:deploy:staging": "echo 'Staging deployment triggered via GitHub Actions'",
+    "ci:deploy:production": "echo 'Production deployment requires manual approval'"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@types/react-dom": "^19.1.7",
+    "autoprefixer": "^10.4.22",
+    "concurrently": "^8.2.2",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}
