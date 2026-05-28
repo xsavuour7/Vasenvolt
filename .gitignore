@@ -1,3 +1,5 @@
 mosquitto/config/pwfile
 mosquitto/data/mosquitto.db
 data/
+__pycache__/
+*.pyc
