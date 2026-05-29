@@ -3,3 +3,5 @@ mosquitto/data/mosquitto.db
 data/
 __pycache__/
 *.pyc
+node_modules/
+
