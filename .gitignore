@@ -5,3 +5,11 @@ __pycache__/
 *.pyc
 node_modules/
 
+#secrets
+backend/.env.production
+backend/env.produciton
+backend/.env.staging
+backend/env.staging
+backend/env.development
+backend/.env.development
+backend/.env.test
