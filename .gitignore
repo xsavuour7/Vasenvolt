@@ -6,8 +6,8 @@ __pycache__/
 node_modules/
 
 #secrets
-.env.staging
-.env.production
-.env.development
-.env.test
+backend/.env.staging
+backend/.env.production
+backend/.env.development
+backend/.env.test
 
