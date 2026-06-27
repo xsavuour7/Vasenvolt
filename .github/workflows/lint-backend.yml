@@ -3,26 +3,27 @@ run-name: Linting Backend
 on: [push]
 
 jobs:
-  Backend-Linting:
+  lint:
     runs-on: ubuntu-latest
     steps:
-      uses: actions/checkoutv4
-    - name: setup python 3.11
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.11"
-    - name: install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flake8 black isort
-        pip install -r backend/requirements.txt
-    - name: Lint with Flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
-      run: |
-        pytest
+      - uses: actions/checkout@v4
 
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 black isort
+          pip install -r backend/requirements.txt
+
+      - name: Lint with Flake8
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      - name: Test with pytest
+        run: |
+          pytest
