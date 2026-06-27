@@ -1,12 +1,6 @@
 name: lint-backend
-
+run-name: Linting Backend
 on: [push]
-branches: [$default-branch]
-pull_request:
-  branches: [$default-branch]
-
-permissions:
-  contents: read
 
 jobs:
   Backend-Linting:
