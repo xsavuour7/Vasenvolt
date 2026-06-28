@@ -1,29 +1,46 @@
-name: lint-backend
-run-name: Linting Backend
+name: Lint
 on: [push]
 
 jobs:
-  lint:
+  lint-backend:
+    name: Lint · Backend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Python 3.12
-        uses: actions/setup-python@v4
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
 
-      - name: Install dependencies
+      - name: Install lint dependencies
         run: |
           python -m pip install --upgrade pip
           pip install flake8 black isort
           pip install -r backend/requirements.txt
 
-      - name: Lint with Flake8
-        run: |
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Black · format check
+        run: black --check backend/
 
-      - name: Test with pytest
+      - name: isort · import order check
+        run: isort --check-only --diff backend/
+
+      - name: Flake8 · hard errors (syntax / undefined names)
         run: |
-          pytest
+          flake8 backend/ \
+            --count \
+            --select=E9,F63,F7,F82 \
+            --show-source \
+            --statistics
+
+      - name: Flake8 · style warnings
+        run: |
+          flake8 backend/ \
+            --count \
+            --exit-zero \
+            --max-complexity=10 \
+            --max-line-length=127 \
+            --statistics \
+
