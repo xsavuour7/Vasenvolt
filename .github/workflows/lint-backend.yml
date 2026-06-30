@@ -22,7 +22,7 @@ jobs:
           pip install -r backend/requirements.txt
 
       - name: Black · format check
-        run: black --check /backend/
+        run: black --check backend/
 
       - name: isort · import order check
         run: isort --check-only --diff backend/
