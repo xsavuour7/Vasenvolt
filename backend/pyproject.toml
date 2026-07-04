@@ -13,9 +13,7 @@ license = {text = "MIT"}
 readme = "README.md"
 requires = ">=3.8"
 dependencies = [
-  {  "fastapi"
-     "requests >= 2.25.0"
-  } 
+    {"fastapi", "requests >= 2.25.0"}, 
 ]
 
 [project.urls]
