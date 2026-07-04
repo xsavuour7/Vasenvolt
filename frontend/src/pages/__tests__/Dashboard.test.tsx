@@ -18,7 +18,7 @@ vi.mock('../../hooks/useMetrics', () => ({
 }))
 
 vi.mock('../../components/SiteMeterFilters', () => ({
-  default: ({ selectedSiteId, selectedMeterId, onSiteChange, onMeterChange }: any) => (
+  default: ({ selectedSiteId, selectedMeterId, onSiteChange, onMeterChange }) => (
     <div data-testid="site-meter-filters">
       <select
         data-testid="site-select"
@@ -57,7 +57,7 @@ vi.mock('../../components/KPICards', () => ({
 }))
 
 vi.mock('../../components/ConsumptionChart', () => ({
-  default: ({ data, isLoading, error }: any) => (
+  default: ({ data, isLoading, error }:) => (
     <div data-testid="consumption-chart">
       Chart - Loading: {isLoading ? 'true' : 'false'}, Error: {error || 'none'}, Data: {data ? 'present' : 'none'}
     </div>
