@@ -32,10 +32,9 @@ function getDoubleRange(range: string): string {
 function filterPreviousPeriodData(
   data: MetricsDataPoint[],
   currentStartTime: string,
-  currentEndTime: string
 ): MetricsDataPoint[] {
   const currentStart = new Date(currentStartTime).getTime()
-  const currentEnd = new Date(currentEndTime).getTime()
+
   // Filter points that are strictly before the current period start
   // This handles aggregated time buckets that might not align exactly
   return data.filter(point => {
