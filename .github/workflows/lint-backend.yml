@@ -29,7 +29,7 @@ jobs:
 
       - name: Flake8 · hard errors (syntax / undefined names)
         run: |
-          flake8 backend/ \
+          flake8 backend/ --exclude=backend/venv \
             --count \
             --select=E9,F63,F7,F82 \
             --show-source \
