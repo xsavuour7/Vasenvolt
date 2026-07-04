@@ -1,8 +1,8 @@
-name: Front lint
+name: Lint Frontend
+run-name: Linting Frontend
 on: [push]
-
+jobs:
   lint-frontend:
-    name: Lint · Frontend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
