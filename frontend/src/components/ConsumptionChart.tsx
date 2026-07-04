@@ -48,14 +48,14 @@ export default function ConsumptionChart({
     })
   }
 
-  // Get theme colors
-  const [themeColors, setThemeColors] = useState({
-    foreground: '#0f172a',
-    mutedForeground: '#64748b',
-    border: '#e2e8f0',
-    primary: '#0f172a',
-    card: '#ffffff',
+  useEffect(() => {
+  const getColor = (varName: string, fallback: string) => { /* ... */ }
+  setThemeColors({
+    foreground: getColor('--foreground', '#0f172a'),
+    mutedForeground: getColor('--muted-foreground', '#64748b'),
+    border: getColor('--border', '#e2e8f0'),
   })
+}, [])
 
   useEffect(() => {
     // Get computed colors from CSS variables
