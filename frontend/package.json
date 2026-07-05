@@ -12,7 +12,6 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage"
     "format": "prettier --write ."
-    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.10",
