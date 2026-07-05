@@ -22,7 +22,7 @@ jobs:
         working-directory: frontend/
         run: npm run lint
 
-      - name: Prettier · format check
+      - name: Prettier · format
         working-directory: frontend/
         run: npm run format
 
