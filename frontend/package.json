@@ -11,7 +11,6 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
-    "format": "prettier --write .",
     "format": "prettier --check ."
   },
   "dependencies": {
@@ -40,6 +39,7 @@
     "globals": "^16.5.0",
     "jsdom": "^25.0.1",
     "postcss": "^8.4.47",
+    "prettier": "^3.9.4",
     "tailwindcss": "^3.4.17",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.3",
