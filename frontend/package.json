@@ -11,7 +11,7 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
-    "format": "prettier --check ."
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.10",
