@@ -2,7 +2,7 @@ import { useMemo, useEffect, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import type { MetricsResponse } from '../api/metrics'
 
-export interface ConsumptionChartProps {
+interface ConsumptionChartProps {
   data: MetricsResponse | undefined
   isLoading?: boolean
   error?: string | null
