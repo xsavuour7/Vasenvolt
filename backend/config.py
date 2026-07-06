@@ -158,7 +158,7 @@ class Settings(BaseSettings):
             raise ValueError('SECRET_KEY must be at least 32 characters long')
         return v
 
-    @field_validator('allowed_origins', pre=True)
+    @field_validator('allowed_origins')
     def parse_allowed_origins(cls, v):
         if isinstance(v, str):
             try:
