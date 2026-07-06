@@ -1,5 +1,7 @@
 name: Test Backend
 run-name: Test Backend
+on: [push]
+
 jobs:
   test-backend:
     name: Test · Backend
