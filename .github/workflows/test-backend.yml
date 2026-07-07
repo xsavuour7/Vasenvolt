@@ -1,6 +1,7 @@
 name: Test Backend
 run-name: Test Backend
 on: [push]
+environment: test
 
 jobs:
   test-backend:
