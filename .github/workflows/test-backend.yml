@@ -1,5 +1,5 @@
 name: Test Backend
-run-name: Test Backend
+run-name: Testing Backend
 on: [push]
 
 jobs:
