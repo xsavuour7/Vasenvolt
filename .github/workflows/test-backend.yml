@@ -66,14 +66,15 @@ jobs:
       - name: Run tests with coverage
         working-directory: backend
         env:
-          DATABASE_URL=postgresql://vasenvolt_test:{{ secrets.TEST_DB_PASSWORD }}@localhost:5432/vasenvolt_test
-          REDIS_URL=redis://localhost:6379/0
-          ENVIRONMENT=test
-          DEBUG=false
-          DATABASE_TEST_URL=postgresql://vasenvolt_test:{{ secrets.TEST_DB_PASSWORD }}@localhost:5432/vasenvolt_test
-          SECRET_KEY=xxx
-          FRONTEND_URL=https://localhost:5173
-          ALLOWED_ORIGINS=http://localhost:5173
+         Environment: test
+           DATABASE_URL={{ secrets.DATABASE_URL }}
+           REDIS_URL=redis://localhost:6379/0
+           ENVIRONMENT=test
+           DEBUG=false
+           DATABASE_TEST_URL={{ secrets.DATABASE_TEST_URL }}
+           SECRET_KEY=xxx
+           FRONTEND_URL=https://localhost:5173
+           ALLOWED_ORIGINS=http://localhost:5173
         run: |
           pytest \
             --cov=. \
