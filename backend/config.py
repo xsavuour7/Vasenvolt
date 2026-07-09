@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Pick env file based on APP_ENV
-app_env = os.getenv("APP_ENV", "development", "test", "production")
+app_env = os.getenv("APP_ENV", "test")
 env_file = f".env.{app_env}"
 
 class DatabaseSettings(BaseModel):
