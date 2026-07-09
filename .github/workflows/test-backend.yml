@@ -51,7 +51,7 @@ jobs:
           DATABASE_TEST_URL=postgresql://vasenvolt_test:${{ secrets.TEST_DB_PASSWORD }}@localhost:5432/vasenvolt_test
           SECRET_KEY=gl0de!VyR/1%ZoOf,lexD1bw|F5wc\*g|dxIN6>5{\z!:1k83LdB\B:K\Xi~=
           FRONTEND_URL=https://localhost:5173
-          ALLOWED_ORIGINS=http://localhost:5173
+          ALLOWED_ORIGINS=["http://localhost:5173"]
           EOF
  
       - name: Install dependencies
