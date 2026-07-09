@@ -66,6 +66,8 @@ jobs:
  
       - name: Run tests with coverage
         working-directory: backend
+        env:
+           ENV_FILE: .env.test
         run: |
           pytest \
             --cov=. \
