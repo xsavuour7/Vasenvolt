@@ -39,12 +39,7 @@ jobs:
           python-version: "3.11"
           cache: pip
           cache-dependency-path: backend/requirements.txt
- 
-      - name: Install dependencies
-        run: |
-          pip install -r backend/requirements.txt
-          pytest --cov --cov-branch --cov-report=xml
- 
+
       - name: Create .env.test
         run: |
           cat > backend/.env.test << EOF
@@ -54,6 +49,11 @@ jobs:
           DEBUG=false
           EOF
  
+      - name: Install dependencies
+        run: |
+          pip install -r backend/requirements.txt
+          pytest --cov --cov-branch --cov-report=xml
+  
       - name: Run migrations
         working-directory: backend
         env:
