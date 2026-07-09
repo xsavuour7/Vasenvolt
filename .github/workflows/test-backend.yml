@@ -40,7 +40,7 @@ jobs:
           cache: pip
           cache-dependency-path: backend/requirements.txt
 
-      - name: Create .env.test
+      - name: Create .env.development
         run: |
           cat > backend/.env.test << EOF
           ENVIRONMENT=test
@@ -61,13 +61,13 @@ jobs:
       - name: Run migrations
         working-directory: backend
         env:
-          ENV_FILE: .env.test
+          ENV_FILE: .env.development
         run: python migrate.py upgrade head
  
       - name: Run tests with coverage
         working-directory: backend
         env:
-           ENV_FILE: .env.test
+          ENV_FILE: .env.development
         run: |
           pytest \
             --cov=. \
