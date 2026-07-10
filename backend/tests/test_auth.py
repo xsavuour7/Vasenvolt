@@ -3,6 +3,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.database import Base, get_db
+import app
 from app.models import User, RefreshToken
 from app.auth.security import get_password_hash, verify_password, create_access_token, create_refresh_token
 from datetime import datetime, timezone, timedelta
