@@ -8,7 +8,7 @@ from datetime import datetime, timezone, timedelta
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
-from app.models import Telemetry, Tenant
+from app.models import Telemetry
 # Fixtures are automatically available from conftest.py
 
 
