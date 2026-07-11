@@ -11,7 +11,7 @@ import os
 from app.database import Base, get_db
 from main import app
 # Import all models to ensure tables are created
-from app.models import Tenant, Site, Meter, MeterType, MeterStatus, Telemetry
+from app import models
 
 # Use SQLite for testing (faster and no external dependencies)
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test_telemetry.db"
