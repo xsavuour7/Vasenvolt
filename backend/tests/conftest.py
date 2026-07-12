@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
 from datetime import datetime, timezone
 import os
 
-from app.models import Tenant
+from app.models import Tenant, Meter, Meter_Reading, Site, Telemetry, Refresh_Token, User 
 from app.database import Base, get_db
 from main import app
 # Import all models to ensure tables are created
