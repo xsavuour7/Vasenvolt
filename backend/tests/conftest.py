@@ -15,7 +15,7 @@ from main import app
 from app import models
 
 # Use SQLite for testing (faster and no external dependencies)
-SQLALCHEMY_DATABASE_URL = "sqlite:///./test_telemetry.db"
+SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, 
     connect_args={
