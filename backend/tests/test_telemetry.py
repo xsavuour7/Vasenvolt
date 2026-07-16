@@ -9,6 +9,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 from app.models import Telemetry
+from app.api import metrics
 # Fixtures are automatically available from conftest.py
 
 
