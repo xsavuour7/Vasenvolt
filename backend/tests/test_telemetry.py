@@ -69,7 +69,7 @@ class TestTelemetryJSONIngestion:
         
         response = client.post("/api/telemetry", json=invalid_data)
         assert response.status_code == 422  # Validation error
-        assert "negative" in response.json()["detail"] or "validation" in response.json()["detail"]
+        assert "negative" in response.json()["detail"].lower() or "validation" in response.json()["detail"].lower()
     
     def test_create_telemetry_invalid_tenant(self, client: TestClient, 
                                             test_site, test_meter):
