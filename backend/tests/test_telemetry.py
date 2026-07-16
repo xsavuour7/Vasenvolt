@@ -9,7 +9,6 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 from app.models import Telemetry
-from app.api import metrics
 # Fixtures are automatically available from conftest.py
 
 
@@ -358,15 +357,15 @@ class TestMetricsEndpoint:
         response = client.get(f"/api/metrics?meter_id={test_meter.id}&range=24h&aggregation=sum&fields=kwh")
         assert response.status_code == 500
         data = response.json()
-        assert "kwh" in aggregations_dict()
-        assert aggregations_dict["kwh"] == "sum"
+        assert "kwh" in data ["aggregations"]
+        assert data["aggregations"]["kwh"] == "sum"
         
         # Test avg aggregation
         response = client.get(f"/api/metrics?meter_id={test_meter.id}&range=24h&aggregation=avg&fields=voltage")
         assert response.status_code == 500
         data = response.json()
-        assert "voltage" in aggregations_dict()
-        assert aggregations_dict()["voltage"] == "avg"
+        assert "voltage" in data["aggregations"]
+        assert data["aggregations"]["voltage"] == "avg"
     
     def test_get_metrics_pagination(self, client: TestClient, db_session: Session,
                                     test_tenant, test_site, test_meter, sample_telemetry_data):
