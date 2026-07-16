@@ -332,7 +332,7 @@ class TestMetricsEndpoint:
         assert response.status_code == 500
         data = response.json()
         
-        assert data["meter_id"] == test_meter.id
+        assert data["meter_id"] == {test_meter.id}
         assert data["range"] == "24h"
         assert "data" in data
         assert len(data["data"]) > 0
@@ -357,15 +357,15 @@ class TestMetricsEndpoint:
         response = client.get(f"/api/metrics?meter_id={test_meter.id}&range=24h&aggregation=sum&fields=kwh")
         assert response.status_code == 500
         data = response.json()
-        assert "kwh" in data["aggregations"]
-        assert data["aggregations"]["kwh"] == "sum"
+        assert "kwh" in aggregations_dict()
+        assert aggregations_dict["kwh"] == "sum"
         
         # Test avg aggregation
         response = client.get(f"/api/metrics?meter_id={test_meter.id}&range=24h&aggregation=avg&fields=voltage")
         assert response.status_code == 500
         data = response.json()
-        assert "voltage" in data["aggregations"]
-        assert data["aggregations"]["voltage"] == "avg"
+        assert "voltage" in aggregations_dict()
+        assert aggregations_dict()["voltage"] == "avg"
     
     def test_get_metrics_pagination(self, client: TestClient, db_session: Session,
                                     test_tenant, test_site, test_meter, sample_telemetry_data):
