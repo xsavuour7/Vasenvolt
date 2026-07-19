@@ -177,14 +177,22 @@ async def get_metrics(
         # Determine time grouping interval based on range
         # For ranges <= 24h, group by hour; for >24h, group by day
         total_hours = (end_time - start_time).total_seconds() / 3600
-        if total_hours <= 24:
-            # Group by hour
-            time_group = func.date_trunc('hour', Telemetry.timestamp)
-            interval_desc = "hour"
+        dialect_name = db.bind.dialect.name
+
+        if dialect_name == "sqlite":
+            if total_hours <= 24:
+                time_group = func.strftime('%Y-%m-%d %H:00:00', Telemetry.timestamp)
+                interval_desc = "hour"
+            else:
+                time_group = func.strftime('%Y-%m-%d 00:00:00', Telemetry.timestamp)
+                interval_desc = "day"
         else:
-            # Group by day
-            time_group = func.date_trunc('day', Telemetry.timestamp)
-            interval_desc = "day"
+            if total_hours <= 24:
+                time_group = func.date_trunc('hour', Telemetry.timestamp)
+                interval_desc = "hour"
+            else:
+                time_group = func.date_trunc('day', Telemetry.timestamp)
+                interval_desc = "day"
         
         # Build aggregation query
         select_fields = [time_group.label('timestamp')]
