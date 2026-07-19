@@ -363,7 +363,7 @@ class TestMetricsEndpoint:
         
         # Test avg aggregation
         response = client.get(f"/api/metrics?meter_id={test_meter.id}&range=24h&aggregation=avg&fields=voltage")
-        assert response.status_code == 500
+        assert response.status_code == 200
         data = response.json()
         assert "voltage" in data["aggregations"]
         assert data["aggregations"]["voltage"] == "avg"
