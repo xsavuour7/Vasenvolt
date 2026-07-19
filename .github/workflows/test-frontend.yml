@@ -2,6 +2,7 @@ name: Testing-Frontend
 run-name: Testing-Frontend
 on: [push]
 
+jobs:
   test-frontend:
     name: Test · Frontend
     needs: lint-frontend
