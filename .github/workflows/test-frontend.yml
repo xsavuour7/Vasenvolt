@@ -34,4 +34,4 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: frontend
-          fail_ci_if_error: false
+          
