@@ -69,7 +69,8 @@ class TestTelemetryJSONIngestion:
         
         response = client.post("/api/telemetry", json=invalid_data)
         assert response.status_code == 422  # Validation error
-        assert "negative" in response.json()["detail"].lower() or "validation" in response.json()["detail"].lower()
+        detail = response.json()["detail"]
+        assert any("kwh" in str(err.get("loc", [])) for err in detail)
     
     def test_create_telemetry_invalid_tenant(self, client: TestClient, 
                                             test_site, test_meter):
@@ -329,10 +330,10 @@ class TestMetricsEndpoint:
         # Query metrics
         response = client.get(f"/api/metrics?meter_id={test_meter.id}&range=24h&aggregation=sum")
         
-        assert response.status_code == 500
+        assert response.status_code == 200
         data = response.json()
         
-        assert data["meter_id"] == {test_meter.id}
+        assert data["meter_id"] == test_meter.id
         assert data["range"] == "24h"
         assert "data" in data
         assert len(data["data"]) > 0
@@ -355,14 +356,14 @@ class TestMetricsEndpoint:
         
         # Test sum aggregation
         response = client.get(f"/api/metrics?meter_id={test_meter.id}&range=24h&aggregation=sum&fields=kwh")
-        assert response.status_code == 500
+        assert response.status_code == 200
         data = response.json()
         assert "kwh" in data ["aggregations"]
         assert data["aggregations"]["kwh"] == "sum"
         
         # Test avg aggregation
         response = client.get(f"/api/metrics?meter_id={test_meter.id}&range=24h&aggregation=avg&fields=voltage")
-        assert response.status_code == 500
+        assert response.status_code == 200
         data = response.json()
         assert "voltage" in data["aggregations"]
         assert data["aggregations"]["voltage"] == "avg"
@@ -380,7 +381,7 @@ class TestMetricsEndpoint:
         
         # Get first page
         response = client.get(f"/api/metrics?meter_id={test_meter.id}&range=7d&page=1&page_size=5")
-        assert response.status_code == 500
+        assert response.status_code == 200
         data = response.json()
         assert len(data["data"]) <= 5
         assert data["page"] == 1
