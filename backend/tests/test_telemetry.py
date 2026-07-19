@@ -330,7 +330,7 @@ class TestMetricsEndpoint:
         # Query metrics
         response = client.get(f"/api/metrics?meter_id={test_meter.id}&range=24h&aggregation=sum")
         
-        assert response.status_code == 500
+        assert response.status_code == 200
         data = response.json()
         
         assert data["meter_id"] == test_meter.id
@@ -356,7 +356,7 @@ class TestMetricsEndpoint:
         
         # Test sum aggregation
         response = client.get(f"/api/metrics?meter_id={test_meter.id}&range=24h&aggregation=sum&fields=kwh")
-        assert response.status_code == 500
+        assert response.status_code == 200
         data = response.json()
         assert "kwh" in data ["aggregations"]
         assert data["aggregations"]["kwh"] == "sum"
