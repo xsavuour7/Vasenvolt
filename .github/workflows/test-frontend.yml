@@ -43,9 +43,9 @@ jobs:
         working-directory: frontend
         run: npm ci
  
-      - name: Run Jest tests with coverage
+      - name: Run vitest tests with coverage
         working-directory: frontend
-        run: npm test -- --coverage
+        run: npm test -- run  --coverage
  
       - name: Build application
         working-directory: frontend
