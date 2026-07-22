@@ -45,7 +45,7 @@ jobs:
  
       - name: Run vitest tests with coverage
         working-directory: frontend
-        run: npm test -- run  --coverage
+        run: vitest run --coverage
  
       - name: Build application
         working-directory: frontend
