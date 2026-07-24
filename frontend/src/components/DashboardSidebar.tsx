@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
-import { useAuth } from '../contexts/'
+import { useAuth } from '../contexts/useAuth'
 
 interface DashboardSidebarProps {
   isOpen: boolean
