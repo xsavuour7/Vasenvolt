@@ -8,7 +8,7 @@ import Meters from './pages/Meters'
 import Alerts from './pages/Alerts'
 import Admin from './pages/Admin'
 import ProtectedRoute from './components/ProtectedRoute'
-import useAuth from './contexts/useAuth'
+import { useAuth } from './contexts/useAuth'
 function RootRedirect() {
   const { isAuthenticated, isLoading } = useAuth()
   
