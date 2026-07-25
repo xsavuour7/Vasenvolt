@@ -67,7 +67,7 @@ export default function ConsumptionChart({
       // For now, use fallback colors that work with the theme
       return value || fallback
     }
-    themeColors({
+    themeColors: ({
       foreground: getColor('--foreground', '#0f172a'),
       mutedForeground: getColor('--muted-foreground', '#64748b'),
       border: getColor('--border', '#e2e8f0'),
@@ -79,7 +79,7 @@ export default function ConsumptionChart({
     // Detect dark mode
     const isDark = document.documentElement.classList.contains('dark')
     
-    themeColors({
+    themeColors: ({
       foreground: isDark ? '#f1f5f9' : '#0f172a',
       mutedForeground: isDark ? '#94a3b8' : '#64748b',
       border: isDark ? '#334155' : '#e2e8f0',
