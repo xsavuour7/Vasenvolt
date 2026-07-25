@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useAuth } from '../contexts/'
+import { useAuth } from '../contexts/useAuth'
 import DashboardLayout from './DashboardLayout'
 
 interface LayoutProps {
