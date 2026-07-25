@@ -49,7 +49,7 @@ export default function ConsumptionChart({
   }
 
    // Get theme colors
-   const [themeColors, setthemeColours] = useState({
+   const [themeColors, setthemeColors] = useState({
     foreground: '#0f172a',
     mutedForeground: '#64748b',
     border: '#e2e8f0',
