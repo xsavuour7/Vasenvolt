@@ -124,7 +124,7 @@ export default function ConsumptionChart({
       
       interface TooltipParam {
         dataIndex: number
-        },
+      }
 
         formatter: (params: ConsumptionChartProps) => {
           const param = params[0]
