@@ -121,9 +121,6 @@ export default function ConsumptionChart({
         textStyle: {
           color: themeColors.foreground,
         },
-interface TooltipParam {
-  dataIndex: number
-}
 
         formatter: (params: ConsumptionChartProps) => {
           const param = params[0]
