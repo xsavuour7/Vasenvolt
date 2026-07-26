@@ -67,7 +67,7 @@ export default function ConsumptionChart({
       // For now, use fallback colors that work with the theme
       return value || fallback
     }
-    SetThemeColors ({
+    setThemeColors ({
       foreground: getColor('--foreground', '#0f172a'),
       mutedForeground: getColor('--muted-foreground', '#64748b'),
       border: getColor('--border', '#e2e8f0'),
