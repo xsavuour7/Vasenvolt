@@ -49,7 +49,7 @@ export default function ConsumptionChart({
   }
 
    // Get theme colors
-   const [themeColors] = useState({
+   const [themeColors,setThemeColors] = useState({
     foreground: '#0f172a',
     mutedForeground: '#64748b',
     border: '#e2e8f0',
@@ -67,7 +67,7 @@ export default function ConsumptionChart({
       // For now, use fallback colors that work with the theme
       return value || fallback
     }
-    themeColors ({
+    SetThemeColors ({
       foreground: getColor('--foreground', '#0f172a'),
       mutedForeground: getColor('--muted-foreground', '#64748b'),
       border: getColor('--border', '#e2e8f0'),
@@ -79,7 +79,7 @@ export default function ConsumptionChart({
     // Detect dark mode
     const isDark = document.documentElement.classList.contains('dark')
     
-    themeColors ({
+    setThemeColors ({
       foreground: isDark ? '#f1f5f9' : '#0f172a',
       mutedForeground: isDark ? '#94a3b8' : '#64748b',
       border: isDark ? '#334155' : '#e2e8f0',
@@ -121,7 +121,7 @@ export default function ConsumptionChart({
         textStyle: {
           color: themeColors.foreground,
         },
-        formatter: (params) => {
+        formatter: (params: any) => {
           const param = params[0]
           const originalTimestamp = timestamps[param.dataIndex]
           const date = new Date(originalTimestamp)
