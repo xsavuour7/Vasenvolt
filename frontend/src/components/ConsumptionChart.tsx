@@ -121,7 +121,7 @@ export default function ConsumptionChart({
         textStyle: {
           color: themeColors.foreground,
         },
-        formatter: (params: tooltipParam[]) => {
+        formatter: (params: ConsumptionChartProps) => {
           const param = params[0]
           const originalTimestamp = timestamps[param.dataIndex]
           const date = new Date(originalTimestamp)
