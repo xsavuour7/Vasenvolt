@@ -1,24 +1,6 @@
 import { createContext, useState, useEffect, type ReactNode } from 'react'
 import { authApi, type TokenResponse, type User } from '../api/auth'
-
-interface AuthContextType {
-  user: User | null
-  isLoading: boolean
-  isAuthenticated: boolean
-  login: (email: string, password: string) => Promise<void>
-  signup: (userData: {
-    email: string
-    username: string
-    password: string
-    first_name?: string
-    last_name?: string
-    phone?: string
-  }) => Promise<void>
-  logout: () => Promise<void>
-  refreshUser: () => Promise<void>
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+import { AuthContext } from './AuthContextDef '
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
