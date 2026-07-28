@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect, type ReactNode } from 'react'
 import { authApi, type TokenResponse, type User } from '../api/auth'
 
-export interface AuthContextType {
+interface AuthContextType {
   user: User | null
   isLoading: boolean
   isAuthenticated: boolean
@@ -18,7 +18,7 @@ export interface AuthContextType {
   refreshUser: () => Promise<void>
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined)
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
