@@ -85,7 +85,7 @@ export default function ConsumptionChart({
       border: isDark ? '#334155' : '#e2e8f0',
       primary: isDark ? '#f1f5f9' : '#0f172a',
       card: isDark ? '#1e293b' : '#ffffff',
-    })
+    });
   }, [])
 
   // Prepare chart data
