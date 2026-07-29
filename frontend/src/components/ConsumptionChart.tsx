@@ -86,7 +86,6 @@ export default function ConsumptionChart({
       primary: isDark ? '#f1f5f9' : '#0f172a',
       card: isDark ? '#1e293b' : '#ffffff',
     });
-  }, [])
 
   // Prepare chart data
   const chartOption = useMemo(() => {
