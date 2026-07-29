@@ -66,7 +66,7 @@ export default function ConsumptionChart({
       // CSS variables are HSL format, so we'll use a simpler approach
       // For now, use fallback colors that work with the theme
       return value || fallback
-    }
+ }, [])
     setThemeColors({
       foreground: getColor('--foreground', '#0f172a'),
       mutedForeground: getColor('--muted-foreground', '#64748b'),
@@ -86,7 +86,7 @@ export default function ConsumptionChart({
       primary: isDark ? '#f1f5f9' : '#0f172a',
       card: isDark ? '#1e293b' : '#ffffff',
     });
- }, [])
+ 
   // Prepare chart data
   const chartOption = useMemo(() => {
     if (!data || data.data.length === 0) {
