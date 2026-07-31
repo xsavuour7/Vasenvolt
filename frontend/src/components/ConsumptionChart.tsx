@@ -80,8 +80,10 @@ export default function ConsumptionChart({
     
 
     // Detect dark mode
- useEffect(() => {
-  const isDark = document.documentElement.classList.contains('dark')   
+  useEffect(() => {
+    const isDark = document.documentElement.classList.contains('dark')
+    } 
+  
     setThemeColors({
       foreground: isDark ? '#f1f5f9' : '#0f172a',
       mutedForeground: isDark ? '#94a3b8' : '#64748b',
