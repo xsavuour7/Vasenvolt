@@ -63,6 +63,7 @@ export default function ConsumptionChart({
       if (typeof window === 'undefined') return fallback
       const style = getComputedStyle(document.documentElement)
       const value = style.getPropertyValue(varName).trim()
+      const isDark = document.documentElement.classList.contains('dark')
       // CSS variables are HSL format, so we'll use a simpler approach
       // For now, use fallback colors that work with the theme
       return value || fallback
@@ -79,7 +80,6 @@ export default function ConsumptionChart({
     
 
     // Detect dark mode
-    const isDark = document.documentElement.classList.contains('dark')
     
     setThemeColors({
       foreground: isDark ? '#f1f5f9' : '#0f172a',
