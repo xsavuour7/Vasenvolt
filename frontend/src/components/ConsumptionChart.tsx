@@ -80,14 +80,16 @@ export default function ConsumptionChart({
     
 
     // Detect dark mode
-    
+ useEffect(() => {
+  const isDark = document.documentElement.classList.contains('dark')   
     setThemeColors({
       foreground: isDark ? '#f1f5f9' : '#0f172a',
       mutedForeground: isDark ? '#94a3b8' : '#64748b',
       border: isDark ? '#334155' : '#e2e8f0',
       primary: isDark ? '#f1f5f9' : '#0f172a',
       card: isDark ? '#1e293b' : '#ffffff',
-    });
+    })
+}, [])
  
   // Prepare chart data
   const chartOption = useMemo(() => {
