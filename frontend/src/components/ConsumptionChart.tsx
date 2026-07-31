@@ -66,15 +66,16 @@ export default function ConsumptionChart({
       // CSS variables are HSL format, so we'll use a simpler approach
       // For now, use fallback colors that work with the theme
       return value || fallback
-    }, 
-  })
+    }
+
     setThemeColors({
       foreground: getColor('--foreground', '#0f172a'),
       mutedForeground: getColor('--muted-foreground', '#64748b'),
       border: getColor('--border', '#e2e8f0'),
       primary: getColor('--primary', '#0f172a'),
       card: getColor('--card', '#ffffff'),
-    });
+    })
+}, [])
     
 
     // Detect dark mode
