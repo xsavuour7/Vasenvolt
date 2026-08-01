@@ -71,7 +71,7 @@ export default function ConsumptionChart({
 
 
 
-    themeColors({
+    setThemeColors({
       foreground: isDark ? '#f1f5f9': getColor('--foreground', '#0f172a'),
       mutedForeground: isDark ? '#94a3b8': getColor('--muted-foreground', '#64748b'),
       border: isDark ? '#334155' : getColor('--border', '#e2e8f0'),
@@ -115,7 +115,7 @@ export default function ConsumptionChart({
           color: themeColors.foreground,
         },
 
-        formatter: (params: ConsumptionChartProps) => {
+        formatter: (params: any) => {
           const param = params[0]
           const originalTimestamp = timestamps[param.dataIndex]
           const date = new Date(originalTimestamp)
