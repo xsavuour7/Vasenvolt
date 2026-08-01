@@ -59,7 +59,7 @@ export default function ConsumptionChart({
 
   useEffect(() => {
     // Get computed colors from CSS variables
-    const isDark = document.documentElement.classlist.contains('dark')
+    const isDark = document.documentElement.classList.contains('dark')
     const getColor = (varName: string, fallback: string) => {
       if (typeof window === 'undefined') return fallback
       const style = getComputedStyle(document.documentElement)
