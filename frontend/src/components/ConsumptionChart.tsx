@@ -67,7 +67,9 @@ export default function ConsumptionChart({
       // CSS variables are HSL format, so we'll use a simpler approach
       // For now, use fallback colors that work with the theme
       return value || fallback
-    }
+    })
+
+
 
     setThemeColors({
       foreground: isDark ? '#f1f5f9': getColor('--foreground', '#0f172a'),
@@ -76,7 +78,7 @@ export default function ConsumptionChart({
       primary: isDark ? '#f1f5f9' : getColor('--primary', '#0f172a'),
       card: isDark ? '#1e293b' : getColor('--card', '#ffffff'),
     })
-}, [])
+}
    
  
   // Prepare chart data
