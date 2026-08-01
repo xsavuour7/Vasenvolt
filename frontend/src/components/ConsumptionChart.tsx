@@ -70,28 +70,14 @@ export default function ConsumptionChart({
     }
 
     setThemeColors({
-      foreground: getColor('--foreground', '#0f172a'),
-      mutedForeground: getColor('--muted-foreground', '#64748b'),
-      border: getColor('--border', '#e2e8f0'),
-      primary: getColor('--primary', '#0f172a'),
-      card: getColor('--card', '#ffffff'),
+      foreground: isDark ? '#f1f5f9': getColor('--foreground', '#0f172a'),
+      mutedForeground: isDark ? '#94a3b8': getColor('--muted-foreground', '#64748b'),
+      border: isDark ? '#334155' : getColor('--border', '#e2e8f0'),
+      primary: isDark ? '#f1f5f9' : getColor('--primary', '#0f172a'),
+      card: isDark ? '#1e293b' : getColor('--card', '#ffffff'),
     })
 }, [])
-    
-
-    // Detect dark mode
-  useEffect(() => {
-    const isDark = document.documentElement.classList.contains('dark')
-  },   
-  
-    setThemeColors({
-      foreground: isDark ? '#f1f5f9' : '#0f172a',
-      mutedForeground: isDark ? '#94a3b8' : '#64748b',
-      border: isDark ? '#334155' : '#e2e8f0',
-      primary: isDark ? '#f1f5f9' : '#0f172a',
-      card: isDark ? '#1e293b' : '#ffffff',
-    })
-}, [])
+   
  
   // Prepare chart data
   const chartOption = useMemo(() => {
