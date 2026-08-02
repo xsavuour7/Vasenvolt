@@ -75,7 +75,7 @@ export function usePreviousPeriodMetrics(params: UsePreviousPeriodMetricsParams)
       const response = await metricsApi.getMetrics(queryParams)
       
       // Filter to get only the previous period data
-      const previousPeriodData = filterPreviousPeriodData(response.data, startTime, endTime)
+      const previousPeriodData = filterPreviousPeriodData(response.data, startTime)
       
       // Return a modified response with only previous period data
       return {
@@ -105,4 +105,3 @@ export function usePreviousPeriodMetrics(params: UsePreviousPeriodMetricsParams)
     refetch: query.refetch,
   }
 }
-

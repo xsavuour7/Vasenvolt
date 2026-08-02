@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import ReactECharts from 'echarts-for-react'
+import type { TooltipComponentFormatterCallbackParams } from 'echarts'
 import type { MetricsResponse } from '../api/metrics'
 
 interface ConsumptionChartProps {
@@ -107,8 +108,8 @@ export default function ConsumptionChart({
           color: themeColors.foreground,
         },
 
-        formatter: (params: ConsumptionChartProps) => {
-          const param = params[0]
+        formatter: (params: TooltipComponentFormatterCallbackParams) => {
+          const param = Array.isArray(params) ? params[0] : params
           const originalTimestamp = timestamps[param.dataIndex]
           const date = new Date(originalTimestamp)
           const formattedDate = date.toLocaleString('en-US', {
@@ -124,7 +125,7 @@ export default function ConsumptionChart({
               <strong>${formattedDate}</strong>
             </div>
             <div>
-              ${param.seriesName}: <strong>${param.value.toFixed(2)} kWh</strong>
+              ${param.seriesName}: <strong>${kwhValues[param.dataIndex].toFixed(2)} kWh</strong>
             </div>
           `
         },
