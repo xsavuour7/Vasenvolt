@@ -1,7 +1,8 @@
 security-audit:
   name: Security Audit
   runs-on: ubuntu-latest
-    # Run in parallel with tests — doesn't depend on lint
+ 
+jobs:   # Run in parallel with tests — doesn't depend on lint
   steps:
     - uses: actions/checkout@v4
 
