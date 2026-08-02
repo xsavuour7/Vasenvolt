@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import ReactECharts from 'echarts-for-react'
 import type { MetricsResponse } from '../api/metrics'
 
@@ -48,18 +48,10 @@ export default function ConsumptionChart({
     })
   }
 
-   // Get theme colors
-   const [themeColors, setThemeColors] = useState({
-    foreground: '#0f172a',
-    mutedForeground: '#64748b',
-    border: '#e2e8f0',
-    primary: '#0f172a',
-    card: '#ffffff',
-  })
-
-  useEffect(() => {
-    // Get computed colors from CSS variables
-    const isDark = document.documentElement.classList.contains('dark')
+  // Get theme colors
+  const isDark =
+    typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
+  const themeColors = useMemo(() => {
     const getColor = (varName: string, fallback: string) => {
       if (typeof window === 'undefined') return fallback
       const style = getComputedStyle(document.documentElement)
@@ -69,16 +61,16 @@ export default function ConsumptionChart({
       return value || fallback
     }
 
-
-
-    setThemeColors({
-      foreground: isDark ? '#f1f5f9': getColor('--foreground', '#0f172a'),
-      mutedForeground: isDark ? '#94a3b8': getColor('--muted-foreground', '#64748b'),
+    return {
+      foreground: isDark ? '#f1f5f9' : getColor('--foreground', '#0f172a'),
+      mutedForeground: isDark
+        ? '#94a3b8'
+        : getColor('--muted-foreground', '#64748b'),
       border: isDark ? '#334155' : getColor('--border', '#e2e8f0'),
       primary: isDark ? '#f1f5f9' : getColor('--primary', '#0f172a'),
       card: isDark ? '#1e293b' : getColor('--card', '#ffffff'),
-    })
-}, [])
+    }
+  }, [isDark])
    
  
   // Prepare chart data
@@ -289,4 +281,3 @@ export default function ConsumptionChart({
     </div>
   )
 }
-
