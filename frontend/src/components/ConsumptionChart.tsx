@@ -71,7 +71,7 @@ export default function ConsumptionChart({
 
 
 
-    themeColors({
+    setThemeColors({
       foreground: isDark ? '#f1f5f9': getColor('--foreground', '#0f172a'),
       mutedForeground: isDark ? '#94a3b8': getColor('--muted-foreground', '#64748b'),
       border: isDark ? '#334155' : getColor('--border', '#e2e8f0'),
