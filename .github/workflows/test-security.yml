@@ -1,6 +1,7 @@
 security-audit:
   name: Security Audit
   runs-on: ubuntu-latest
+  on: [push]
  
 jobs:   # Run in parallel with tests — doesn't depend on lint
   steps:
