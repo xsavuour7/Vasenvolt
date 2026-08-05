@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router'
 import { useAuth } from '../contexts/useAuth'
 import { useMetrics } from '../hooks/useMetrics'
 import KPICards from '../components/KPICards'
