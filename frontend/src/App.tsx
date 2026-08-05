@@ -1,4 +1,4 @@
-import { BrowswerRouter, Routes, Route, Navigate } from 'react-router'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router'
 import { AuthProvider } from './contexts/AuthContext'
 import Layout from './components/Layout'
 import Login from './pages/Login'
