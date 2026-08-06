@@ -1,6 +1,6 @@
 # --- Frontend Dockerfile (Vite + React + TS) ---
 
-    FROM node:20-alpine
+    FROM node:22-alpine
 
     WORKDIR /vasenvolt
     
