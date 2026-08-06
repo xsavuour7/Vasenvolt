@@ -1,4 +1,7 @@
-fastapi==0.110.1
+fastapi==0.109.1
+starlette==1.4.1
+pyasn1==0.6.4
+ecdsa==0.19.2
 uvicorn[standard]==0.24.0
 python-multipart==0.0.31
 python-jose[cryptography]==3.4.0
