@@ -1,9 +1,10 @@
 name: deploy-backend-staging
-run-name: staging-setup
+run-name: staging setup
 on:  [push]
 
 jobs:
-  name: Deploy · Backend → Staging
+  deploy-backend-staging:
+  name: deploy-backend-staging
   needs: [test-backend, test-frontend, security-audit]
   runs-on: ubuntu-latest
   environment: staging
@@ -66,7 +67,7 @@ jobs:
           || echo "Warning: external health check failed — check firewall/DNS"
  
 deploy-frontend-staging:
-  name: Deploy · Frontend → Staging
+  name: deploy-frontend-staging:
   needs: [test-backend, test-frontend, security-audit]
   runs-on: ubuntu-latest
   environment: staging
