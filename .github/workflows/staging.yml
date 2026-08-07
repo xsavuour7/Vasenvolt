@@ -1,0 +1,108 @@
+name: deploy-backend-staging
+run-name: staging-setup
+on:  [push]
+
+jobs:
+  name: Deploy · Backend → Staging
+  needs: [test-backend, test-frontend, security-audit]
+  runs-on: ubuntu-latest
+  environment: staging
+  if: >
+    github.event_name == 'workflow_dispatch' &&
+    github.event.inputs.environment == 'staging' &&
+    github.event.inputs.deploy_backend == 'true'
+ 
+  steps:
+    - uses: actions/checkout@v6
+ 
+    - name: Create staging environment file
+      run: |
+        cat > backend/.env.staging << EOF
+        DATABASE_URL=${{ secrets.STAGING_DATABASE_URL }}
+        REDIS_URL=${{ secrets.STAGING_REDIS_URL }}
+        SECRET_KEY=${{ secrets.STAGING_SECRET_KEY }}
+        ENVIRONMENT=staging
+        DEBUG=false
+        ALLOWED_HOSTS=staging.vasenvoltai.com,www.staging.vasenvoltai.com
+        EOF
+ 
+    - name: Deploy to staging via SSH
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.STAGING_HOST }}
+        username: vasenvolt-deploy
+        key: ${{ secrets.STAGING_SSH_KEY }}
+        script: |
+          set -e
+          cd /opt/Vasenvolt/backend
+ 
+          echo "── Pulling latest code ──"
+          git fetch origin
+          git reset --hard origin/${{ github.ref_name }}
+ 
+          echo "── Installing dependencies ──"
+          source venv/bin/activate
+          pip install -r requirements.txt --quiet
+ 
+          echo "── Copying env file ──"
+          cp .env.staging .env
+ 
+          echo "── Running database migrations ──"
+          python migrate.py upgrade head
+ 
+          echo "── Restarting service ──"
+          sudo systemctl restart vasenvolt-backend
+          sleep 3
+          sudo systemctl is-active vasenvolt-backend
+ 
+          echo "── Health check ──"
+          curl -sf http://localhost:8000/health || (echo "Health check failed" && exit 1)
+ 
+    - name: Verify staging deployment
+      run: |
+        sleep 10
+        curl -sf https://staging.vasenvoltai.com/health \
+          -H "X-Deploy-Token: ${{ secrets.STAGING_DEPLOY_TOKEN }}" \
+          || echo "Warning: external health check failed — check firewall/DNS"
+ 
+deploy-frontend-staging:
+  name: Deploy · Frontend → Staging
+  needs: [test-backend, test-frontend, security-audit]
+  runs-on: ubuntu-latest
+  environment: staging
+  if: >
+    github.event_name == 'workflow_dispatch' &&
+    github.event.inputs.environment == 'staging' &&
+    github.event.inputs.deploy_frontend == 'true'
+ 
+  steps:
+    - uses: actions/checkout@v6
+ 
+    - name: Set up Node.js 22
+      uses: actions/setup-node@v6
+      with:
+        node-version: "22"
+        cache: npm
+        cache-dependency-path: frontend/package-lock.json
+ 
+    - name: Install dependencies
+      working-directory: frontend
+      run: npm ci
+ 
+    - name: Build production bundle
+      working-directory: frontend
+      env:
+        NEXT_PUBLIC_API_URL: https://staging.vasenvoltai.com/api
+        NODE_ENV: production
+      run: npm run build
+ 
+    - name: Deploy to Vercel (staging)
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        working-directory: frontend
+        alias-domains: |
+          staging.vasenvoltai.com
+          www.staging.vasenvoltai.com
