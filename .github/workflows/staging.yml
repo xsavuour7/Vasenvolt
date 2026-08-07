@@ -67,7 +67,7 @@ jobs:
           || echo "Warning: external health check failed — check firewall/DNS"
  
 deploy-frontend-staging:
-  name: deploy-frontend-staging:
+  name: deploy-frontend-staging
   needs: [test-backend, test-frontend, security-audit]
   runs-on: ubuntu-latest
   environment: staging
