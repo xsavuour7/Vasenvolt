@@ -4,6 +4,7 @@ on: [push]
 
 jobs:
   deploy-backend-staging:
+    name: deployment
     needs: [test-backend, test-frontend, security-audit]
     runs-on: ubuntu-latest
     environment: staging
