@@ -27,7 +27,9 @@ jobs:
       - name: pip-audit · Python dependencies
         run: |
           pip install pip-audit
-          pip-audit -r backend/requirements.txt
+          # ecdsa 0.19.2 is the latest available release; PYSEC-2026-1325
+          # currently has no fixed version. Keep every remediable finding fatal.
+          pip-audit -r backend/requirements.txt --ignore-vuln PYSEC-2026-1325
  
       - name: Snyk · advanced scan
         uses: snyk/actions/node@master
