@@ -1,6 +1,6 @@
 name: deploy-backend-staging
 run-name: staging setup
-on:  [push]
+on: [push]
 
 jobs:
   deploy-backend-staging:
