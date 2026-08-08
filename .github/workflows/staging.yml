@@ -1,9 +1,7 @@
 name: deploy-backend-staging
 run-name: staging-setup
 on: [push]
-
 jobs:
-  deploy-backend-staging:
     name: deployment
     needs: [test-backend, test-frontend, security-audit]
     runs-on: ubuntu-latest
