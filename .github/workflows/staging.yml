@@ -1,101 +1,127 @@
-name: deploy-backend-staging
-run-name: staging-setup
-on: [push]
+name: Deploy Staging
+run-name: "Staging deployment · ${{ github.ref_name }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_backend:
+        description: Deploy the backend
+        required: true
+        type: boolean
+        default: true
+      deploy_frontend:
+        description: Deploy the frontend
+        required: true
+        type: boolean
+        default: true
+
+concurrency:
+  group: staging-deployment
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
 jobs:
-  staging-setup:
-    name: deployment
+  deploy-backend-staging:
+    name: Deploy backend to staging
+    if: ${{ inputs.deploy_backend }}
     runs-on: ubuntu-latest
     environment: staging
-    if: >
-      github.event_name == 'workflow_dispatch' &&
-      github.event.inputs.environment == 'staging' &&
-      github.event.inputs.deploy_backend == 'true'
- 
+
     steps:
-      - uses: actions/checkout@v6
- 
-      - name: Create staging environment file
-        run: |
-          cat > backend/.env.staging << EOF
-          DATABASE_URL=${{ secrets.STAGING_DATABASE_URL }}
-          REDIS_URL=${{ secrets.STAGING_REDIS_URL }}
-          SECRET_KEY=${{ secrets.STAGING_SECRET_KEY }}
-          ENVIRONMENT=staging
-          DEBUG=false
-          ALLOWED_HOSTS=staging.vasenvoltai.com,www.staging.vasenvoltai.com
-          EOF
- 
+      - uses: actions/checkout@v4
+
       - name: Deploy to staging via SSH
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          STAGING_DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
+          STAGING_REDIS_URL: ${{ secrets.STAGING_REDIS_URL }}
+          STAGING_SECRET_KEY: ${{ secrets.STAGING_SECRET_KEY }}
         with:
           host: ${{ secrets.STAGING_HOST }}
           username: vasenvolt-deploy
           key: ${{ secrets.STAGING_SSH_KEY }}
+          envs: STAGING_DATABASE_URL,STAGING_REDIS_URL,STAGING_SECRET_KEY
           script: |
-            set -e
+            set -euo pipefail
             cd /opt/Vasenvolt/backend
- 
-            echo "── Pulling latest code ──"
-            git fetch origin
-            git reset --hard origin/${{ github.ref_name }}
- 
-            echo "── Installing dependencies ──"
+
+            : "${STAGING_DATABASE_URL:?STAGING_DATABASE_URL is required}"
+            : "${STAGING_REDIS_URL:?STAGING_REDIS_URL is required}"
+            : "${STAGING_SECRET_KEY:?STAGING_SECRET_KEY is required}"
+
+            echo "Pulling latest code"
+            git fetch --prune origin
+            git reset --hard "origin/${{ github.ref_name }}"
+
+            echo "Installing dependencies"
             source venv/bin/activate
-            pip install -r requirements.txt --quiet
- 
-            echo "── Copying env file ──"
-            cp .env.staging .env
- 
-            echo "── Running database migrations ──"
-            python migrate.py upgrade head
- 
-            echo "── Restarting service ──"
+            pip install --requirement requirements.txt --quiet
+
+            echo "Writing staging configuration"
+            umask 077
+            cat > .env.staging.tmp <<EOF
+            DATABASE_URL=${STAGING_DATABASE_URL}
+            DATABASE_TEST_URL=${STAGING_DATABASE_URL}
+            SECRET_KEY=${STAGING_SECRET_KEY}
+            REDIS_URL=${STAGING_REDIS_URL}
+            FRONTEND_URL=https://staging.vasenvoltai.com
+            ALLOWED_ORIGINS=["https://staging.vasenvoltai.com","https://www.staging.vasenvoltai.com"]
+            ENVIRONMENT=staging
+            DEBUG=false
+            EOF
+            mv .env.staging.tmp .env.staging
+
+            echo "Running database migrations"
+            APP_ENV=staging python migrate.py migrate
+
+            if ! sudo systemctl show --property=Environment --value vasenvolt-backend | tr ' ' '\n' | grep --quiet --fixed-strings 'APP_ENV=staging'; then
+              echo "vasenvolt-backend must set APP_ENV=staging in its systemd configuration"
+              exit 1
+            fi
+
+            echo "Restarting service"
             sudo systemctl restart vasenvolt-backend
             sleep 3
-            sudo systemctl is-active vasenvolt-backend
- 
-            echo "── Health check ──"
-            curl -sf http://localhost:8000/health || (echo "Health check failed" && exit 1)
- 
-      - name: Verify staging deployment
+            sudo systemctl is-active --quiet vasenvolt-backend
+
+            echo "Checking backend health"
+            curl --fail --silent --show-error http://localhost:8000/health
+
+      - name: Verify public backend health
         run: |
-          sleep 10
-          curl -sf https://staging.vasenvoltai.com/health \
-            -H "X-Deploy-Token: ${{ secrets.STAGING_DEPLOY_TOKEN }}" \
-            || echo "Warning: external health check failed — check firewall/DNS"
- 
+          curl --fail --silent --show-error --retry 5 --retry-delay 2 \
+            https://staging.vasenvoltai.com/health
+
   deploy-frontend-staging:
-    name: deploy-frontend-staging
-    needs: [test-backend, test-frontend, security-audit]
+    name: Deploy frontend to staging
+    if: ${{ inputs.deploy_frontend }}
     runs-on: ubuntu-latest
     environment: staging
-    if: >
-      github.event_name == 'workflow_dispatch' &&
-      github.event.inputs.environment == 'staging' &&
-      github.event.inputs.deploy_frontend == 'true'
- 
+
     steps:
-      - uses: actions/checkout@v6
- 
-      - name: Set up Node.js 22
-        uses: actions/setup-node@v6
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: "22"
           cache: npm
           cache-dependency-path: frontend/package-lock.json
- 
+
       - name: Install dependencies
         working-directory: frontend
         run: npm ci
- 
+
       - name: Build production bundle
         working-directory: frontend
         env:
           NEXT_PUBLIC_API_URL: https://staging.vasenvoltai.com/api
           NODE_ENV: production
         run: npm run build
- 
-      - name: Deploy to Vercel (staging)
+
+      - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
