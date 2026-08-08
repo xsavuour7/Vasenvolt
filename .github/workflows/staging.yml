@@ -1,7 +1,7 @@
 name: deploy-backend-staging
 run-name: staging-setup
-needs: [test-backend, test-frontend, security-audit]
 on: [push]
+needs: [test-backend, test-frontend, security-audit]
 jobs:
   staging-setup:
     name: deployment
