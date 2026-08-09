@@ -1,5 +1,5 @@
 name: Deploy Staging
-run-name: "Staging deployment · ${{ github.ref_name }}"
+run-name: "Staging deployment"
 on: [push]
 jobs:
   deploy-backend-staging:
