@@ -1,27 +1,6 @@
 name: Deploy Staging
 run-name: "Staging deployment · ${{ github.ref_name }}"
-
-on:
-  workflow_dispatch:
-    inputs:
-      deploy_backend:
-        description: Deploy the backend
-        required: true
-        type: boolean
-        default: true
-      deploy_frontend:
-        description: Deploy the frontend
-        required: true
-        type: boolean
-        default: true
-
-concurrency:
-  group: staging-deployment
-  cancel-in-progress: false
-
-permissions:
-  contents: read
-
+on: [push]
 jobs:
   deploy-backend-staging:
     name: Deploy backend to staging
@@ -30,7 +9,7 @@ jobs:
     environment: staging
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Deploy to staging via SSH
         uses: appleboy/ssh-action@v1.0.3

@@ -198,6 +198,9 @@ jobs:
 
       - name: Upload frontend coverage
         if: ${{ secrets.CODECOV_TOKEN }}
+
+
+
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
