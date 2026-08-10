@@ -1,4 +1,4 @@
-# Vasenvolt - Secure Authentication System  #
+# Vasenvolt - Secure Authentication System  
 
 A monorepo containing a secure authentication system with React/TypeScript frontend and FastAPI backend.
 
