@@ -62,7 +62,7 @@ jobs:
             echo "Restarting service"
             systemctl restart vasenvolt-backend
             sleep 3
-            sudo systemctl is-active --quiet vasenvolt-backend
+            systemctl is-active --quiet vasenvolt-backend
 
             echo "Checking backend health"
             curl --fail --silent --show-error http://localhost:8000/health
