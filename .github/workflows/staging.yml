@@ -54,15 +54,15 @@ jobs:
             echo "Running database migrations"
             APP_ENV=staging python migrate.py migrate
 
-            if ! systemctl show --property=Environment --value vasenvolt-backend | tr ' ' '\n' | grep --quiet --fixed-strings 'APP_ENV=staging'; then
+            if ! sudo systemctl show --property=Environment --value vasenvolt-backend | tr ' ' '\n' | grep --quiet --fixed-strings 'APP_ENV=staging'; then
               echo "vasenvolt-backend must set APP_ENV=staging in its systemd configuration"
               exit 1
             fi
 
             echo "Restarting service"
-            systemctl restart vasenvolt-backend
+            sudo systemctl restart vasenvolt-backend
             sleep 3
-            systemctl is-active --quiet vasenvolt-backend
+            sudo systemctl is-active --quiet vasenvolt-backend
 
             echo "Checking backend health"
             curl --fail --silent --show-error http://localhost:8000/health
