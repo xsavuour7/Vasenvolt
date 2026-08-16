@@ -70,7 +70,7 @@ jobs:
       - name: Verify public backend health
         run: |
           curl --fail --silent --show-error --retry 5 --retry-delay 2 \
-            https://staging.vasenvoltai.com/health
+            https://staging.api.vasenvoltai.com/health
 
   deploy-frontend-staging:
     name: Deploy frontend to staging
