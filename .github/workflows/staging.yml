@@ -60,7 +60,7 @@ jobs:
             fi
 
             echo "Restarting service"
-            sudo systemctl restart vasenvolt-backend
+            systemctl restart vasenvolt-backend
             sleep 3
             sudo systemctl is-active --quiet vasenvolt-backend
 
@@ -79,10 +79,10 @@ jobs:
     environment: staging
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "22"
           cache: npm
