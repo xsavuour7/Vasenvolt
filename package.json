@@ -35,7 +35,8 @@
     "ci:test:frontend": "cd frontend && npm test -- --coverage --watchAll=false && npm run build",
     "ci:security": "cd frontend && npm audit --audit-level moderate",
     "ci:deploy:staging": "echo 'Staging deployment triggered via GitHub Actions'",
-    "ci:deploy:production": "echo 'Production deployment requires manual approval'"
+    "ci:deploy:production": "echo 'Production deployment requires manual approval'",
+    "build": "cd frontend && npm run build"
   },
   "devDependencies": {
     "@types/node": "^24.3.0",
