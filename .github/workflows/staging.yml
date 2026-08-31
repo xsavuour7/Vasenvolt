@@ -107,7 +107,7 @@ jobs:
             -m githubOrg=${{ github.repository_owner }} \
             -m githubRepo=Vasenvolt \
             -m githubCommitRef=${{ github.ref_name }}
-          working-directory: frontend
-          alias-domains: |
-            staging.vasenvoltai.com
-            www.staging.vasenvoltai.com
+        working-directory: frontend
+        alias-domains: |
+          staging.vasenvoltai.com
+          www.staging.vasenvoltai.com
