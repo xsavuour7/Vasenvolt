@@ -102,11 +102,6 @@ jobs:
         working-directory: frontend
         run: |
           npm i -g vercel@latest
-          DEPLOYMENT_URL=$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --yes \
-            -m githubCommitSha=${{ github.sha }} \
-            -m githubCommitAuthorName=${{ github.actor }} \
-            -m githubOrg=${{ github.repository_owner }} \
-            -m githubRepo=Vasenvolt \
-            -m githubCommitRef=${{ github.ref_name }})
+          DEPLOYMENT_URL=$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --yes -m githubCommitSha=${{ github.sha }} -m githubCommitAuthorName=${{ github.actor }} -m githubOrg=${{ github.repository_owner }} -m githubRepo=Vasenvolt -m githubCommitRef=${{ github.ref_name }})
           echo "Deployed to $DEPLOYMENT_URL"
-          vercel alias set "DEPLOYMENT_URL" staging.vasenvoltai.com --token=${{ secrets.VERCEL_TOKEN }}
+          vercel alias set "$DEPLOYMENT_URL" staging.vasenvoltai.com --token=${{ secrets.VERCEL_TOKEN }}
