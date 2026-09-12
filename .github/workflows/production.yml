@@ -1,0 +1,28 @@
+name: deployment
+on: [push]
+run-name: deploy-production
+
+jobs:
+  deploy-production:
+    name: Deploy · Production
+    needs: [test-backend, test-frontend, security-audit]
+    runs-on: ubuntu-latest
+    environment: production        # requires manual approval in GitHub env settings
+    if: >
+      github.event_name == 'workflow_dispatch' &&
+      github.event.inputs.environment == 'production' &&
+      github.ref == 'refs/heads/main'
+ 
+    steps:
+      - uses: actions/checkout@v6
+ 
+      - name: Production deployment placeholder
+        run: |
+          echo "Production deployment is not yet configured."
+          echo "Implement deployment steps here once the production"
+          echo "environment is provisioned and secrets are set."
+          echo ""
+          echo "Ref:    ${{ github.ref_name }}"
+          echo "SHA:    ${{ github.sha }}"
+          echo "Actor:  ${{ github.actor }}"
+          exit 0
