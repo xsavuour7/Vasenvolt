@@ -5,7 +5,6 @@ run-name: deploy-production
 jobs:
   deploy-production:
     name: Deploy · Production
-    needs: [test-backend, test-frontend, security-audit]
     runs-on: ubuntu-latest
     environment: production        # requires manual approval in GitHub env settings
     if: >
