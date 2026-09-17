@@ -10,7 +10,7 @@ jobs:
     if: >
       github.event_name == 'workflow_dispatch' &&
       github.event.inputs.environment == 'production' &&
-      github.ref == 'refs/heads/main'
+      github.ref == 'refs/heads/deploy'
  
     steps:
       - uses: actions/checkout@v6
